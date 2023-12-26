@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "695973128790",
+    "project_id": "to-do-list-bloc",
+    "storage_bucket": "to-do-list-bloc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695973128790:android:0a943ba920c11f3b66e9f7",
+        "android_client_info": {
+          "package_name": "com.example.to_do_list_bloc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwN_p7phsJxW57g21JfmnRsIa6TPG_vnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

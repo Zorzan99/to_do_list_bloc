@@ -97,7 +97,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/register');
+                    },
                     child: const Text(
                       'Não tem uma conta? Cadastre-se!',
                       style: TextStyle(color: Colors.blue),

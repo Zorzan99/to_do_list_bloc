@@ -15,7 +15,7 @@ class Routes {
       case registerRoute:
         return MaterialPageRoute(builder: (_) => const RegisterPage());
       case homeRoute:
-        return MaterialPageRoute(builder: (_) => const HomePage());
+        return MaterialPageRoute(builder: (_) => HomePage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

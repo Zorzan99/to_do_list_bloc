@@ -3,8 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list_bloc/firebase_options.dart';
+import 'package:to_do_list_bloc/pages/home/home_cubit.dart';
 import 'package:to_do_list_bloc/pages/login/login_cubit.dart';
 import 'package:to_do_list_bloc/pages/register/register_cubit.dart';
+import 'package:to_do_list_bloc/repositories/home/home_repository.dart';
+import 'package:to_do_list_bloc/repositories/home/home_repository_impl.dart';
 import 'package:to_do_list_bloc/repositories/login/login_repository.dart';
 import 'package:to_do_list_bloc/repositories/login/login_repository_impl.dart';
 import 'package:to_do_list_bloc/repositories/register/register_repository.dart';
@@ -45,9 +48,18 @@ class MyApp extends StatelessWidget {
             context.read<RegisterRepository>(),
           ),
         ),
+        Provider<HomeRepository>(
+          create: (context) => HomeRepositoryImpl(),
+        ),
+        Provider<HomeCubit>(
+          create: (context) => HomeCubit(
+            context.read<HomeRepository>(),
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,

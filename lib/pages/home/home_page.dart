@@ -43,6 +43,12 @@ class HomePage extends StatelessWidget {
             return Center(
               child: Text('Erro: ${state.message}'),
             );
+          } else if (state is DeleteHome && state.taskAtt.isEmpty) {
+            return const Center(
+              child: Text('Lista de tarefas vazia'),
+            );
+          } else if (state is DeleteHome) {
+            return TodoList(tasks: state.taskAtt);
           }
           return const SizedBox.shrink();
         },
@@ -61,15 +67,16 @@ class HomePage extends StatelessWidget {
                   TextButton(
                     onPressed: () async {
                       String userId = user.uid;
+                      final nav = Navigator.pop(context);
                       final Task task = Task(
                         title: titleEC.text,
                         description: descriptionEC.text,
                       );
-
                       await cubit.addTask(userId, task);
                       cubit.getTasks(userId);
-
-                      Navigator.pop(context);
+                      titleEC.clear();
+                      descriptionEC.clear();
+                      nav;
                     },
                     child: const Text('Adicionar'),
                   ),

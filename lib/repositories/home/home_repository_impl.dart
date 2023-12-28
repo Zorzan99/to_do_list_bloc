@@ -10,14 +10,13 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<Task> addTask(String userId, Task task) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
-      await firestore
+      final DocumentReference documentReference = await firestore
           .collection('users')
           .doc(userId)
           .collection('tasks')
           .add(task.toMap());
 
-      final Task updatedTask =
-          task.copyWith(title: task.title, description: task.description);
+      final Task updatedTask = task.copyWith(id: documentReference.id);
 
       return updatedTask;
     } catch (e, s) {
@@ -29,20 +28,38 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<Task>> getTasks(String userId) async {
     try {
-      var listTask = await FirebaseFirestore.instance
+      final QuerySnapshot taskSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
           .collection('tasks')
           .get();
 
-      final listFavorites = <Task>[];
-      for (var movie in listTask.docs) {
-        listFavorites.add(Task.fromMap(movie.data()));
-      }
-      return listFavorites;
+      return taskSnapshot.docs
+          .map((doc) => Task.fromMap(doc.data() as Map<String, dynamic>)
+              .copyWith(id: doc.id))
+          .toList();
     } catch (e, s) {
       log("Error getTask", error: e, stackTrace: s);
       throw Exception("Error");
+    }
+  }
+
+  @override
+  Future<void> deleteTask(String userId, Task task) async {
+    print('Deleting task from repository: $task');
+    final DocumentReference taskReference = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tasks')
+        .doc(task
+            .id); // O campo id já é do tipo String?, então não é necessário chamar .toString()
+
+    try {
+      await taskReference.delete();
+      print('Task deleted from repository successfully');
+    } catch (e, s) {
+      log('Erro ao deletar tarefa', error: e, stackTrace: s);
+      rethrow;
     }
   }
 }

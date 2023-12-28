@@ -26,4 +26,15 @@ class HomeCubit extends Cubit<HomeState> {
       emit(FailureHome(message: 'Erro ao obter tarefas: $e. $s'));
     }
   }
+
+  Future<void> deleteTask(String userId, Task taskId) async {
+    emit(LoadingHome());
+    try {
+      await _homeRepository.deleteTask(userId, taskId);
+      final tasks = await _homeRepository.getTasks(userId);
+      emit(DeleteHome(taskId, tasks));
+    } catch (e, s) {
+      emit(FailureHome(message: 'Erro ao deletar tarefa: $e, $s'));
+    }
+  }
 }

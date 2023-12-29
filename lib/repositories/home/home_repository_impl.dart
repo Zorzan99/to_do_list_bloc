@@ -46,7 +46,6 @@ class HomeRepositoryImpl implements HomeRepository {
 
   @override
   Future<void> deleteTask(String userId, Task task) async {
-    print('Deleting task from repository: $task');
     final DocumentReference taskReference = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -56,14 +55,12 @@ class HomeRepositoryImpl implements HomeRepository {
 
     try {
       await taskReference.delete();
-      print('Task deleted from repository successfully');
     } catch (e, s) {
       log('Erro ao deletar tarefa', error: e, stackTrace: s);
       rethrow;
     }
   }
 
-  @override
   @override
   Future<void> editTask(String userId, Task editedTask) async {
     final DocumentReference taskReference = FirebaseFirestore.instance

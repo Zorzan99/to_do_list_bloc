@@ -18,7 +18,11 @@ class DeleteHome implements HomeState {
   );
 }
 
-class EditingHome implements HomeState {}
+class EditHome implements HomeState {
+  final Task editedTask;
+  final List<Task> taskAtt;
+  EditHome(this.editedTask, this.taskAtt);
+}
 
 class LoadingHome implements HomeState {}
 

@@ -4,4 +4,5 @@ abstract interface class HomeRepository {
   Future<Task> addTask(String userId, Task task);
   Future<List<Task>> getTasks(String userId);
   Future<void> deleteTask(String userId, Task taskId);
+  Future<void> editTask(String userId, Task taskId);
 }

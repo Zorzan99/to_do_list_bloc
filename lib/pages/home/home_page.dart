@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
     final cubit = BlocProvider.of<HomeCubit>(context);
     final titleEC = TextEditingController();
     final descriptionEC = TextEditingController();
+
     final user = _auth.currentUser;
 
     cubit.getTasks(user!.uid);
@@ -71,6 +72,7 @@ class HomePage extends StatelessWidget {
                       final Task task = Task(
                         title: titleEC.text,
                         description: descriptionEC.text,
+                        id: user.uid,
                       );
                       await cubit.addTask(userId, task);
                       cubit.getTasks(userId);

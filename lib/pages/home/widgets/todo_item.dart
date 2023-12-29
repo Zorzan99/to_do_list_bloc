@@ -4,12 +4,14 @@ class TodoItem extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onLongPress;
+  final VoidCallback onTap;
 
   const TodoItem(
       {Key? key,
       required this.title,
       required this.subtitle,
-      required this.onLongPress})
+      required this.onLongPress,
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -18,6 +20,7 @@ class TodoItem extends StatelessWidget {
       title: Text(title),
       subtitle: Text(subtitle),
       onLongPress: onLongPress,
+      onTap: onTap,
     );
   }
 }

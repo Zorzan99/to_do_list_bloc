@@ -62,4 +62,22 @@ class HomeRepositoryImpl implements HomeRepository {
       rethrow;
     }
   }
+
+  @override
+  @override
+  Future<void> editTask(String userId, Task editedTask) async {
+    final DocumentReference taskReference = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('tasks')
+        .doc(editedTask.id);
+
+    try {
+      // Atualiza os dados da tarefa no Firestore
+      await taskReference.update(editedTask.toMap());
+    } catch (e, s) {
+      log('Erro ao editar tarefa', error: e, stackTrace: s);
+      rethrow;
+    }
+  }
 }

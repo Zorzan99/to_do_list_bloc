@@ -37,4 +37,20 @@ class HomeCubit extends Cubit<HomeState> {
       emit(FailureHome(message: 'Erro ao deletar tarefa: $e, $s'));
     }
   }
+
+  Future<void> editTask(String userId, Task editedTask) async {
+    emit(LoadingHome());
+    try {
+      // Atualiza a tarefa no repositório
+      await _homeRepository.editTask(userId, editedTask);
+
+      // Obtém a lista atualizada de tarefas
+      final tasks = await _homeRepository.getTasks(userId);
+
+      // Emite o estado EditHome com a tarefa editada e a lista atualizada
+      emit(EditHome(editedTask, tasks));
+    } catch (e, s) {
+      emit(FailureHome(message: 'Erro ao editar tarefa: $e, $s'));
+    }
+  }
 }

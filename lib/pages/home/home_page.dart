@@ -26,7 +26,21 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         title: const Text('Tarefas'),
       ),
-      body: BlocBuilder<HomeCubit, HomeState>(
+      body: BlocConsumer<HomeCubit, HomeState>(
+        listener: (context, state) {
+          if (state is EditHome) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Tarefa atualizada com sucesso'),
+                  ],
+                ),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           if (state is LoadingHome) {
             return const Center(
@@ -68,7 +82,7 @@ class HomePage extends StatelessWidget {
                   TextButton(
                     onPressed: () async {
                       String userId = user.uid;
-                      final nav = Navigator.pop(context);
+                      final nav = Navigator.of(context);
                       final Task task = Task(
                         title: titleEC.text,
                         description: descriptionEC.text,
@@ -78,7 +92,7 @@ class HomePage extends StatelessWidget {
                       cubit.getTasks(userId);
                       titleEC.clear();
                       descriptionEC.clear();
-                      nav;
+                      nav.pop();
                     },
                     child: const Text('Adicionar'),
                   ),

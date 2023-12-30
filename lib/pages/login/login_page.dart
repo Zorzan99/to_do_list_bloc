@@ -20,7 +20,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+
   final _emailEC = TextEditingController();
+
   final _passwordEC = TextEditingController();
 
   @override
@@ -32,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.watch<LoginCubit>();
+    final cubit = context.read<LoginCubit>();
 
     return Scaffold(
       body: Form(
@@ -50,6 +52,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 );
+              } else if (state is LoadedLogin) {
+                Future.delayed(const Duration(seconds: 5), () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      Routes.homeRoute, (route) => true);
+                });
               }
             },
             builder: (context, state) {
@@ -121,14 +128,11 @@ class _LoginPageState extends State<LoginPage> {
                           Button(
                             label: "LOGIN",
                             onPressed: () async {
-                              final nav = Navigator.of(context);
                               final valid =
                                   _formKey.currentState?.validate() ?? false;
                               if (valid) {
                                 await cubit.login(
                                     _emailEC.text, _passwordEC.text);
-                                nav.pushNamedAndRemoveUntil(
-                                    Routes.homeRoute, (route) => true);
                               }
                             },
                           ),

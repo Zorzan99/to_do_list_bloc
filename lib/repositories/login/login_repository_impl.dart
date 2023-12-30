@@ -12,11 +12,13 @@ class LoginRepositoryImpl implements LoginRepository {
   Future<User?> login(String email, String password) async {
     try {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       return userCredential.user;
     } catch (e, s) {
-      log("Error LoginRepositoryImpl ", error: e, stackTrace: s);
+      log("Error LoginRepositoryImpl: $e", error: e, stackTrace: s);
+      throw Exception("Erro ao realizar login");
     }
-    throw Exception("Erro ao realizar login");
   }
 }

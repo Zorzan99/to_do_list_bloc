@@ -6,20 +6,29 @@ import 'package:to_do_list_bloc/pages/home/home_cubit.dart';
 import 'package:to_do_list_bloc/pages/home/home_state.dart';
 import 'package:to_do_list_bloc/pages/home/widgets/todo_list.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  HomePage({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<HomeCubit>().getTasks(_auth.currentUser!.uid);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<HomeCubit>(context);
     final titleEC = TextEditingController();
     final descriptionEC = TextEditingController();
-
-    final user = _auth.currentUser;
-
-    cubit.getTasks(user!.uid);
 
     return Scaffold(
       appBar: AppBar(
@@ -81,12 +90,12 @@ class HomePage extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () async {
-                      String userId = user.uid;
+                      String userId = _auth.currentUser!.uid;
                       final nav = Navigator.of(context);
                       final Task task = Task(
                         title: titleEC.text,
                         description: descriptionEC.text,
-                        id: user.uid,
+                        id: _auth.currentUser!.uid,
                       );
                       await cubit.addTask(userId, task);
                       cubit.getTasks(userId);

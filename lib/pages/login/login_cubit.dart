@@ -12,9 +12,7 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> login(String email, String password) async {
     emit(LoadingLogin());
 
-    await Future.delayed(
-        const Duration(seconds: 2)); // Simula um carregamento de 2 segundos
-
+    await Future.delayed(const Duration(seconds: 3));
     try {
       await _loginRepository.login(email, password);
       emit(LoadedLogin());

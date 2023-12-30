@@ -30,6 +30,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        // CRIAR CLASSE DE TAMANHOS PARA BORDERRADIUS, PADDING, SIZEDBOX
+        // CRIAR ARQUIVO PARA TRABALHAR COM RESPONSIVIDADE
+        // GLOBALIZAR PROVIDERS,
+        // CONFIGURAR THEMA(FONTES, COR PRINCIPAL, ETC),
+
         Provider<LoginRepository>(
           create: (context) =>
               LoginRepositoryImpl(firebaseAuth: FirebaseAuth.instance),

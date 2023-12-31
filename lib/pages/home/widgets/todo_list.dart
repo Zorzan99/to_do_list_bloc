@@ -22,11 +22,17 @@ class TodoList extends StatelessWidget {
       itemCount: tasks.length,
       itemBuilder: (context, index) {
         return TodoItem(
-          onTap: () {
+          onLongPress: () {
+            if (user != null) {
+              cubit.deleteTask(user.uid, tasks[index]);
+            }
+          },
+          title: tasks[index].title,
+          subtitle: tasks[index].description,
+          onPressed: () {
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                // Retorna o widget do popup
                 return AlertDialog(
                   title: const Text('Adicionar Valor'),
                   content: Column(
@@ -70,13 +76,6 @@ class TodoList extends StatelessWidget {
               },
             );
           },
-          onLongPress: () {
-            if (user != null) {
-              cubit.deleteTask(user.uid, tasks[index]);
-            }
-          },
-          title: tasks[index].title,
-          subtitle: tasks[index].description,
         );
       },
     );

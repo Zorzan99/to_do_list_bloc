@@ -15,6 +15,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailEC = TextEditingController();
   final _passwordEC = TextEditingController();
+  final _userNameEC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +64,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFormField(
+                    validator: Validatorless.required('Nome é obrigatório'),
+                    controller: _userNameEC,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome',
+                    ),
+                  ),
+                  TextFormField(
                     validator: Validatorless.multiple([
                       Validatorless.required('E-mail obrigatório'),
                       Validatorless.email('E-mail inválido'),
@@ -87,7 +96,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () async {
                       final valid = _formKey.currentState?.validate() ?? false;
                       if (valid) {
-                        cubit.register(_emailEC.text, _passwordEC.text);
+                        cubit.register(
+                            _emailEC.text, _passwordEC.text, _userNameEC.text);
                       }
                     },
                     child: const Text('Login'),

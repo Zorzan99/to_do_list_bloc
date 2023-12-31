@@ -31,8 +31,35 @@ class _HomePageState extends State<HomePage> {
     final descriptionEC = TextEditingController();
 
     return Scaffold(
+      drawer: Drawer(
+        backgroundColor: Colors.red,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Bem-vindo, ${_auth.currentUser!.displayName}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            ListTile(
+              title: const Text('Item 1'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: const Text('Item 2'),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text('Tarefas'),
       ),

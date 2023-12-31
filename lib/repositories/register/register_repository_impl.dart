@@ -8,16 +8,21 @@ class RegisterRepositoryImpl implements RegisterRepository {
   final FirebaseAuth _firebaseAuth;
   RegisterRepositoryImpl({required FirebaseAuth firebaseAuth})
       : _firebaseAuth = firebaseAuth;
+
   @override
-  Future<User?> register(String email, String password) async {
+  Future<User?> register(
+      String email, String password, String displayName) async {
     try {
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+
+      await userCredential.user?.updateDisplayName(displayName);
+
       return userCredential.user;
     } on FirebaseAuthException catch (e, s) {
       log('Erro', error: e, stackTrace: s);
 
-      if (e.code == 'emai-already-in-use') {
+      if (e.code == 'email-already-in-use') {
         final loginTypes =
             await _firebaseAuth.fetchSignInMethodsForEmail(email);
         if (loginTypes.contains('password')) {

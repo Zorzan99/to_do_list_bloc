@@ -8,11 +8,12 @@ class RegisterCubit extends Cubit<RegisterState> {
   final RegisterRepository _registerRepository;
   RegisterCubit(this._registerRepository) : super(InitialRegister());
 
-  Future<void> register(String email, String password) async {
+  Future<void> register(
+      String email, String password, String displayName) async {
     emit(LoadingRegister());
     await Future.delayed(const Duration(seconds: 2));
     try {
-      await _registerRepository.register(email, password);
+      await _registerRepository.register(email, password, displayName);
       emit(LoadedRegister());
     } catch (e, s) {
       log('Erro Cubit register', error: e, stackTrace: s);

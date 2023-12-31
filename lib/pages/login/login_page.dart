@@ -38,94 +38,89 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: Form(
-          key: _formKey,
-          child: BlocConsumer<LoginCubit, LoginState>(
-            listener: (context, state) {
-              if (state is FailureLogin) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Erro ao realizar login'),
-                      ],
-                    ),
+        key: _formKey,
+        child: BlocConsumer<LoginCubit, LoginState>(
+          listener: (context, state) {
+            if (state is FailureLogin) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Erro ao realizar login'),
+                    ],
                   ),
-                );
-              } else if (state is LoadedLogin) {
-                Future.delayed(const Duration(seconds: 5), () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.homeRoute, (route) => true);
-                });
-              }
-            },
-            builder: (context, state) {
-              if (state is LoadingLogin) {
-                return const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(child: CircularProgressIndicator()),
-                    SizedBox(height: SpacingSize.g),
-                    Center(child: Text('Realizando Login...')),
-                  ],
-                );
-              }
-              return Stack(
-                children: [
-                  const Background(),
-                  SizedBox(
-                    height: ScreenSize.screenHeight(context),
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 40,
-                        vertical: 120,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'To-Do-List',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
+                ),
+              );
+            } else if (state is LoadedLogin) {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(Routes.homeRoute, (route) => true);
+            }
+          },
+          builder: (context, state) {
+            return Stack(
+              children: [
+                const Background(),
+                SizedBox(
+                  height: ScreenSize.screenHeight(context),
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 120,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'To-Do-List',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(
-                            height: SpacingSize.xxl,
+                        ),
+                        const SizedBox(
+                          height: SpacingSize.xxl,
+                        ),
+                        LoginBoxField(
+                          label: 'E-mail',
+                          child: LoginFormField(
+                            validator: Validatorless.multiple([
+                              Validatorless.required('E-mail obrigatório'),
+                              Validatorless.email('E-mail inválido'),
+                            ]),
+                            controller: _emailEC,
+                            hintText: "Insira seu e-mail",
+                            icon: Icons.email,
+                            keyboardType: TextInputType.emailAddress,
                           ),
-                          LoginBoxField(
-                            label: 'E-mail',
-                            child: LoginFormField(
-                              validator: Validatorless.multiple([
-                                Validatorless.required('E-mail obrigatório'),
-                                Validatorless.email('E-mail inválido'),
-                              ]),
-                              controller: _emailEC,
-                              hintText: "Insira seu e-mail",
-                              icon: Icons.email,
-                              keyboardType: TextInputType.emailAddress,
-                            ),
+                        ),
+                        const SizedBox(
+                          height: SpacingSize.xl,
+                        ),
+                        LoginBoxField(
+                          label: "Senha",
+                          child: LoginFormField(
+                            controller: _passwordEC,
+                            validator:
+                                Validatorless.required('Senha obrigatória'),
+                            hintText: "Insira sua senha",
+                            icon: Icons.lock,
+                            keyboardType: TextInputType.emailAddress,
                           ),
-                          const SizedBox(
-                            height: SpacingSize.xl,
+                        ),
+                        const SizedBox(
+                          height: SpacingSize.xl,
+                        ),
+                        Visibility(
+                          visible: state is! LoadingLogin,
+                          replacement: const Column(
+                            children: [
+                              CircularProgressIndicator(),
+                              Text('Realizando Login')
+                            ],
                           ),
-                          LoginBoxField(
-                            label: "Senha",
-                            child: LoginFormField(
-                              controller: _passwordEC,
-                              validator:
-                                  Validatorless.required('Senha obrigatória'),
-                              hintText: "Insira sua senha",
-                              icon: Icons.lock,
-                              keyboardType: TextInputType.emailAddress,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: SpacingSize.xl,
-                          ),
-                          Button(
+                          child: Button(
                             label: "LOGIN",
                             onPressed: () async {
                               final valid =
@@ -136,38 +131,40 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             },
                           ),
-                          const SizedBox(
-                            height: SpacingSize.xl,
-                          ),
-                          Row(
-                            children: [
-                              const Text("Não tem conta?"),
-                              const SizedBox(
-                                width: SpacingSize.xx,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, Routes.registerRoute);
-                                },
-                                child: const Text(
-                                  "Cadastre-se agora!",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                        ),
+                        const SizedBox(
+                          height: SpacingSize.xl,
+                        ),
+                        Row(
+                          children: [
+                            const Text("Não tem conta?"),
+                            const SizedBox(
+                              width: SpacingSize.xx,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, Routes.registerRoute);
+                              },
+                              child: const Text(
+                                "Cadastre-se agora!",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          )
-                        ],
-                      ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                  )
-                ],
-              );
-            },
-          )),
+                  ),
+                )
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }

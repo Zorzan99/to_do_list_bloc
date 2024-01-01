@@ -6,7 +6,9 @@ class InitialHome implements HomeState {}
 
 class AddHome implements HomeState {
   final Task addedTask;
-  AddHome(this.addedTask);
+  final List<Task> tasks;
+
+  AddHome(this.addedTask, this.tasks);
 }
 
 class DeleteHome implements HomeState {

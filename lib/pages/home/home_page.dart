@@ -101,6 +101,8 @@ class _HomePageState extends State<HomePage> {
             );
           } else if (state is DeleteHome) {
             return TodoList(tasks: state.taskAtt);
+          } else if (state is AddHome) {
+            return TodoList(tasks: state.tasks);
           }
           return const SizedBox.shrink();
         },
@@ -123,10 +125,10 @@ class _HomePageState extends State<HomePage> {
                       final Task task = Task(
                         title: titleEC.text,
                         description: descriptionEC.text,
-                        id: _auth.currentUser!.uid,
+                        id: userId,
                       );
                       await cubit.addTask(userId, task);
-                      cubit.getTasks(userId);
+
                       titleEC.clear();
                       descriptionEC.clear();
                       nav.pop();

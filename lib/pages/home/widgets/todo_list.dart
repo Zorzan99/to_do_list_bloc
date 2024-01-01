@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_list_bloc/models/task.dart';
 import 'package:to_do_list_bloc/pages/home/home_cubit.dart';
+import 'package:to_do_list_bloc/pages/home/widgets/home_form_fiel.dart';
 import 'package:to_do_list_bloc/pages/home/widgets/todo_item.dart';
+import 'package:validatorless/validatorless.dart';
 
 class TodoList extends StatelessWidget {
   final List<Task> tasks;
@@ -11,12 +13,13 @@ class TodoList extends StatelessWidget {
 
   TodoList({Key? key, required this.tasks}) : super(key: key);
 
+  final _descriptionEC = TextEditingController();
+  final _titleEC = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<HomeCubit>(context);
     final user = _auth.currentUser;
-    final titleEC = TextEditingController();
-    final descriptionEC = TextEditingController();
 
     return ListView.builder(
       itemCount: tasks.length,
@@ -34,44 +37,85 @@ class TodoList extends StatelessWidget {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: const Text('Adicionar Valor'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        controller: titleEC,
-                      ),
-                      TextFormField(
-                        controller: descriptionEC,
-                      ),
-                    ],
+                  title: const Text('Alterar descrição'),
+                  content: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        HomeFormFiel(
+                          controller: _titleEC,
+                          validator:
+                              Validatorless.required("Titulo necessário"),
+                          title: 'Titulo',
+                        ),
+                        const SizedBox(height: 20),
+                        HomeFormFiel(
+                          controller: _descriptionEC,
+                          validator:
+                              Validatorless.required("Descrição necessária"),
+                          title: 'Descrição',
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                final valid =
+                                    _formKey.currentState?.validate() ?? false;
+                                if (valid) {
+                                  String userId = user!.uid;
+                                  final nav = Navigator.pop(context);
+                                  final Task task = Task(
+                                    title: _titleEC.text,
+                                    description: _descriptionEC.text,
+                                    id: tasks[index].id,
+                                  );
+                                  await cubit.editTask(userId, task);
+                                  cubit.getTasks(userId);
+                                  _titleEC.clear();
+                                  _descriptionEC.clear();
+                                  nav;
+                                }
+                              },
+                              child: const Text('Alterar'),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                  actions: [
-                    // Botão para cancelar o popup
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Cancelar'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        String userId = user!.uid;
-                        final nav = Navigator.pop(context);
-                        final Task task = Task(
-                          title: titleEC.text,
-                          description: descriptionEC.text,
-                          id: tasks[index].id,
-                        );
-                        await cubit.editTask(userId, task);
-                        cubit.getTasks(userId);
-                        titleEC.clear();
-                        descriptionEC.clear();
-                        nav;
-                      },
-                      child: const Text('Adicionar'),
-                    ),
-                  ],
+                  // actions: [
+                  //   TextButton(
+                  //     onPressed: () {
+                  //       Navigator.of(context).pop();
+                  //     },
+                  //     child: const Text('Cancelar'),
+                  //   ),
+                  //   TextButton(
+                  //     onPressed: () async {
+                  //       String userId = user!.uid;
+                  //       final nav = Navigator.pop(context);
+                  //       final Task task = Task(
+                  //         title: _titleEC.text,
+                  //         description: _descriptionEC.text,
+                  //         id: tasks[index].id,
+                  //       );
+                  //       await cubit.editTask(userId, task);
+                  //       cubit.getTasks(userId);
+                  //       _titleEC.clear();
+                  //       _descriptionEC.clear();
+                  //       nav;
+                  //     },
+                  //     child: const Text('Alterar'),
+                  //   ),
+                  // ],
                 );
               },
             );

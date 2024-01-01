@@ -3,12 +3,12 @@ import 'dart:convert';
 class Task {
   final String title;
   final String description;
-  final String? id;
+  final String id;
 
   Task({
     required this.title,
     required this.description,
-    this.id,
+    required this.id,
   });
 
   Task copyWith({
@@ -35,7 +35,7 @@ class Task {
     return Task(
       title: map['title'] ?? '',
       description: map['description'] ?? '',
-      id: map['id'],
+      id: map['id'] ?? '',
     );
   }
 

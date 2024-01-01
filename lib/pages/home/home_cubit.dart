@@ -11,7 +11,8 @@ class HomeCubit extends Cubit<HomeState> {
     emit(LoadingHome());
     try {
       final updatedTask = await _homeRepository.addTask(userId, task);
-      emit(AddHome(updatedTask));
+      final tasks = await _homeRepository.getTasks(userId);
+      emit(AddHome(updatedTask, tasks));
     } catch (e, s) {
       emit(FailureHome(message: 'Erro ao adicionar tarefa: $e, $s'));
     }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_list_bloc/pages/register/register_cubit.dart';
 import 'package:to_do_list_bloc/pages/register/register_state.dart';
+import 'package:to_do_list_bloc/routes/routes.dart';
 import 'package:validatorless/validatorless.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -27,7 +28,28 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BlocBuilder<RegisterCubit, RegisterState>(
+        child: BlocConsumer<RegisterCubit, RegisterState>(
+          listener: (context, state) {
+            if (state is FailureRegister) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Erro ao criar conta',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: Colors.redAccent,
+                ),
+              );
+            } else if (state is LoadedRegister) {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(Routes.homeRoute, (route) => false);
+            }
+          },
           builder: (context, state) {
             if (state is LoadingRegister) {
               return const Column(
@@ -39,24 +61,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Center(child: Text('Criando Conta...')),
                 ],
               );
-            } else if (state is LoadedRegister) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/home', (route) => false);
-              });
-            } else if (state is FailureRegister) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Erro ao realizar login'),
-                      ],
-                    ),
-                  ),
-                );
-              });
             }
             return Form(
               key: _formKey,

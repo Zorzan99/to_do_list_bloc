@@ -47,7 +47,21 @@ class _RegisterPageState extends State<RegisterPage> {
               );
             } else if (state is LoadedRegister) {
               Navigator.of(context)
-                  .pushNamedAndRemoveUntil(Routes.homeRoute, (route) => false);
+                  .pushNamedAndRemoveUntil(Routes.loginRoute, (route) => false);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Conta criada com sucesso, efetue o login',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: Colors.blueAccent,
+                ),
+              );
             }
           },
           builder: (context, state) {

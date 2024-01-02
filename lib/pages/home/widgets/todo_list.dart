@@ -91,31 +91,6 @@ class TodoList extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // actions: [
-                  //   TextButton(
-                  //     onPressed: () {
-                  //       Navigator.of(context).pop();
-                  //     },
-                  //     child: const Text('Cancelar'),
-                  //   ),
-                  //   TextButton(
-                  //     onPressed: () async {
-                  //       String userId = user!.uid;
-                  //       final nav = Navigator.pop(context);
-                  //       final Task task = Task(
-                  //         title: _titleEC.text,
-                  //         description: _descriptionEC.text,
-                  //         id: tasks[index].id,
-                  //       );
-                  //       await cubit.editTask(userId, task);
-                  //       cubit.getTasks(userId);
-                  //       _titleEC.clear();
-                  //       _descriptionEC.clear();
-                  //       nav;
-                  //     },
-                  //     child: const Text('Alterar'),
-                  //   ),
-                  // ],
                 );
               },
             );

@@ -31,7 +31,7 @@ class TodoItem extends StatelessWidget {
         subtitle,
         style: const TextStyle(
           fontSize: TextSize.l,
-          color: Colors.grey,
+          color: Colors.black,
         ),
       ),
       onLongPress: onLongPress,

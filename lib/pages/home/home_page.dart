@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do_list_bloc/models/task.dart';
 import 'package:to_do_list_bloc/pages/home/home_cubit.dart';
 import 'package:to_do_list_bloc/pages/home/home_state.dart';
+import 'package:to_do_list_bloc/pages/home/widgets/float_button_home.dart';
+import 'package:to_do_list_bloc/pages/home/widgets/home_drawer.dart';
 import 'package:to_do_list_bloc/pages/home/widgets/todo_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,40 +27,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<HomeCubit>(context);
-    final titleEC = TextEditingController();
-    final descriptionEC = TextEditingController();
-
     return Scaffold(
-      drawer: Drawer(
-        backgroundColor: Colors.red,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Bem-vindo, ${_auth.currentUser!.displayName}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            ListTile(
-              title: const Text('Item 1'),
-              onTap: () {},
-            ),
-            ListTile(
-              title: const Text('Item 2'),
-              onTap: () {},
-            ),
-          ],
-        ),
+      backgroundColor: const Color(0XFF73AEF5),
+      drawer: HomeDrawer(
+        title: 'Bem-vindo, ${_auth.currentUser!.displayName}',
+        perfilTitle: 'Meu perfil',
+        exitTitle: "Sair",
+        onTapPerfil: () {},
+        onPressedExit: () {},
       ),
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         centerTitle: true,
         title: const Text('Tarefas'),
       ),
@@ -74,6 +52,18 @@ class _HomePageState extends State<HomePage> {
                     Text('Tarefa atualizada com sucesso'),
                   ],
                 ),
+              ),
+            );
+          } else if (state is DeleteHome) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Tarefa excluida com sucesso'),
+                  ],
+                ),
+                backgroundColor: Colors.redAccent,
               ),
             );
           }
@@ -107,54 +97,7 @@ class _HomePageState extends State<HomePage> {
           return const SizedBox.shrink();
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Sair'),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      String userId = _auth.currentUser!.uid;
-                      final nav = Navigator.of(context);
-                      final Task task = Task(
-                        title: titleEC.text,
-                        description: descriptionEC.text,
-                        id: userId,
-                      );
-                      await cubit.addTask(userId, task);
-
-                      titleEC.clear();
-                      descriptionEC.clear();
-                      nav.pop();
-                    },
-                    child: const Text('Adicionar'),
-                  ),
-                ],
-                title: const Text('Adicionar uma tarefa'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: titleEC,
-                    ),
-                    TextFormField(
-                      controller: descriptionEC,
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-        label: const Text('Adicionar Tarefa'),
-        icon: const Icon(Icons.add),
-      ),
+      floatingActionButton: const FloatButtonHome(),
     );
   }
 }

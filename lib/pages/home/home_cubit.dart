@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:to_do_list_bloc/models/task.dart';
 import 'package:to_do_list_bloc/pages/home/home_state.dart';
@@ -9,6 +11,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> addTask(String userId, Task task) async {
     emit(LoadingHome());
+    await Future.delayed(const Duration(seconds: 2));
     try {
       final updatedTask = await _homeRepository.addTask(userId, task);
       final tasks = await _homeRepository.getTasks(userId);
@@ -24,29 +27,36 @@ class HomeCubit extends Cubit<HomeState> {
       final tasks = await _homeRepository.getTasks(userId);
       emit(LoadedHome(tasks: tasks));
     } catch (e, s) {
-      emit(FailureHome(message: 'Erro ao obter tarefas: $e. $s'));
+      log('Erro getTasks:', error: e, stackTrace: s);
+      emit(FailureHome(message: 'Erro ao obter tarefas'));
     }
   }
 
   Future<void> deleteTask(String userId, Task taskId) async {
     emit(LoadingHome());
+    await Future.delayed(const Duration(seconds: 1));
     try {
       await _homeRepository.deleteTask(userId, taskId);
       final tasks = await _homeRepository.getTasks(userId);
       emit(DeleteHome(taskId, tasks));
     } catch (e, s) {
-      emit(FailureHome(message: 'Erro ao deletar tarefa: $e, $s'));
+      log('Erro deleteTask:', error: e, stackTrace: s);
+
+      emit(FailureHome(message: 'Erro ao deletar tarefa:'));
     }
   }
 
   Future<void> editTask(String userId, Task editedTask) async {
     emit(LoadingHome());
+    await Future.delayed(const Duration(seconds: 1));
     try {
       await _homeRepository.editTask(userId, editedTask);
       final tasks = await _homeRepository.getTasks(userId);
       emit(EditHome(editedTask, tasks));
     } catch (e, s) {
-      emit(FailureHome(message: 'Erro ao editar tarefa: $e, $s'));
+      log('Erro editTask:', error: e, stackTrace: s);
+
+      emit(FailureHome(message: 'Erro ao editar tarefa:'));
     }
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_list_bloc/core/widgets/button.dart';
+import 'package:to_do_list_bloc/pages/login/widgets/login_form_field.dart';
 import 'package:to_do_list_bloc/pages/register/register_cubit.dart';
 import 'package:to_do_list_bloc/pages/register/register_state.dart';
 import 'package:to_do_list_bloc/routes/routes.dart';
@@ -23,8 +25,26 @@ class _RegisterPageState extends State<RegisterPage> {
     final cubit = context.watch<RegisterCubit>();
 
     return Scaffold(
+      backgroundColor: const Color(0XFF73AEF5),
       appBar: AppBar(
-        title: const Text('Register'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(Routes.loginRoute),
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+        ),
+        title: const Text(
+          'To-Do-List',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -81,36 +101,40 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFormField(
+                  GlobalFormField(
+                    hintText: "Nome",
+                    icon: Icons.person,
                     validator: Validatorless.required('Nome é obrigatório'),
                     controller: _userNameEC,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'Nome',
-                    ),
                   ),
-                  TextFormField(
+                  const SizedBox(height: 16.0),
+                  GlobalFormField(
+                    hintText: "E-mail",
+                    icon: Icons.email,
                     validator: Validatorless.multiple([
                       Validatorless.required('E-mail obrigatório'),
                       Validatorless.email('E-mail inválido'),
                     ]),
                     controller: _emailEC,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'E-mail',
-                    ),
                   ),
                   const SizedBox(height: 16.0),
-                  TextFormField(
+                  GlobalFormField(
+                    hintText: "Senha",
+                    suffixIcon: cubit.isPasswordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    onTap: () {
+                      cubit.togglePasswordVisibility();
+                    },
+                    icon: Icons.lock,
                     validator: Validatorless.required('Senha obrigatória'),
                     controller: _passwordEC,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                    ),
+                    obscureText: cubit.isPasswordVisible,
                   ),
                   const SizedBox(height: 32.0),
-                  ElevatedButton(
+                  Button(
+                    label: "CRIAR CONTA",
                     onPressed: () async {
                       final valid = _formKey.currentState?.validate() ?? false;
                       if (valid) {
@@ -118,7 +142,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             _emailEC.text, _passwordEC.text, _userNameEC.text);
                       }
                     },
-                    child: const Text('Login'),
                   ),
                 ],
               ),

@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:to_do_list_bloc/core/sizes/radius_size.dart';
 import 'package:to_do_list_bloc/core/sizes/text_size.dart';
 
-class LoginFormField extends StatelessWidget {
+class GlobalFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final IconData icon;
+  final IconData? suffixIcon;
   final String hintText;
+  final bool obscureText;
+  final VoidCallback? onTap;
 
-  const LoginFormField({
+  const GlobalFormField({
     Key? key,
     this.validator,
     this.controller,
     this.keyboardType,
-    required this.hintText,
     required this.icon,
+    this.suffixIcon,
+    required this.hintText,
+    this.obscureText = false,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -31,6 +37,7 @@ class LoginFormField extends StatelessWidget {
     return TextFormField(
       validator: validator,
       controller: controller,
+      obscureText: obscureText,
       keyboardType: keyboardType,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
@@ -40,6 +47,13 @@ class LoginFormField extends StatelessWidget {
         enabledBorder: border,
         focusedBorder: border,
         prefixIcon: Icon(icon, color: Colors.white),
+        suffixIcon: IconButton(
+          onPressed: onTap,
+          icon: Icon(
+            suffixIcon,
+            color: Colors.white,
+          ),
+        ),
         errorBorder: errorBorder,
         focusedErrorBorder: border,
         errorStyle:

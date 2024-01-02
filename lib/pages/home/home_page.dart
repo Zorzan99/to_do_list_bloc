@@ -6,6 +6,7 @@ import 'package:to_do_list_bloc/pages/home/home_state.dart';
 import 'package:to_do_list_bloc/pages/home/widgets/float_button_home.dart';
 import 'package:to_do_list_bloc/pages/home/widgets/home_drawer.dart';
 import 'package:to_do_list_bloc/pages/home/widgets/todo_list.dart';
+import 'package:to_do_list_bloc/routes/routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,7 +35,8 @@ class _HomePageState extends State<HomePage> {
         perfilTitle: 'Meu perfil',
         exitTitle: "Sair",
         onTapPerfil: () {},
-        onPressedExit: () {},
+        onPressedExit: () => Navigator.of(context)
+            .pushNamedAndRemoveUntil(Routes.loginRoute, (route) => false),
       ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,

@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  LoginFormField(
+                  GlobalFormField(
                     validator: Validatorless.multiple(
                       [
                         Validatorless.required('E-mail obrigatório'),
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: SpacingSize.xl,
                   ),
-                  LoginFormField(
+                  GlobalFormField(
                     controller: _passwordEC,
                     validator: Validatorless.required('Senha obrigatória'),
                     hintText: "Insira sua senha",

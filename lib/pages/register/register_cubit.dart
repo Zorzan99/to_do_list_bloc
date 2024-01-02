@@ -5,6 +5,8 @@ import 'package:to_do_list_bloc/pages/register/register_state.dart';
 import 'package:to_do_list_bloc/repositories/register/register_repository.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
+  bool isPasswordVisible = false;
+
   final RegisterRepository _registerRepository;
   RegisterCubit(this._registerRepository) : super(InitialRegister());
 
@@ -19,5 +21,10 @@ class RegisterCubit extends Cubit<RegisterState> {
       log('Erro Cubit register', error: e, stackTrace: s);
       emit(FailureRegister(message: 'Erro ao realizar login'));
     }
+  }
+
+  void togglePasswordVisibility() {
+    isPasswordVisible = !isPasswordVisible;
+    emit(HidePasswordRegister(visible: isPasswordVisible));
   }
 }

@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:to_do_list_bloc/core/widgets/button.dart';
 import 'package:to_do_list_bloc/pages/login/widgets/login_form_field.dart';
 import 'package:to_do_list_bloc/pages/register/register_cubit.dart';
@@ -19,6 +22,20 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailEC = TextEditingController();
   final _passwordEC = TextEditingController();
   final _userNameEC = TextEditingController();
+
+  Uint8List? _image;
+  Uint8List? img;
+  void selectImage() async {
+    final cubit = context.watch<RegisterCubit>();
+
+    Uint8List? img = await cubit
+        .pickImage(ImageSource.gallery); // Espere a função assíncrona
+    if (img != null) {
+      setState(() {
+        _image = img;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +118,23 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  _image != null
+                      ? CircleAvatar(
+                          backgroundColor: Colors.amberAccent,
+                          backgroundImage: MemoryImage(_image!),
+                        )
+                      : const CircleAvatar(
+                          backgroundColor: Colors.amberAccent,
+                        ),
+                  IconButton(
+                    onPressed: () async {
+                      img = await cubit.pickImage(ImageSource.gallery);
+                      setState(() {
+                        _image = img;
+                      });
+                    },
+                    icon: const Icon(Icons.camera_alt),
+                  ),
                   GlobalFormField(
                     hintText: "Nome",
                     icon: Icons.person,
@@ -138,8 +172,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () async {
                       final valid = _formKey.currentState?.validate() ?? false;
                       if (valid) {
-                        cubit.register(
-                            _emailEC.text, _passwordEC.text, _userNameEC.text);
+                        cubit.register(_emailEC.text, _passwordEC.text,
+                            _userNameEC.text, _image!);
                       }
                     },
                   ),

@@ -14,14 +14,19 @@ class FloatButtonHome extends StatefulWidget {
 }
 
 class _FloatButtonHomeState extends State<FloatButtonHome> {
+  final formKey = GlobalKey<FormState>();
+  final titleEC = TextEditingController();
+  final descriptionEC = TextEditingController();
+
+  @override
+  void dispose() {
+    titleEC.dispose();
+    descriptionEC.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-
-    final titleEC = TextEditingController();
-
-    final descriptionEC = TextEditingController();
-
     final FirebaseAuth auth = FirebaseAuth.instance;
 
     final cubit = BlocProvider.of<HomeCubit>(context);

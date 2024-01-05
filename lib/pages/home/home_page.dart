@@ -26,21 +26,27 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String? displayName = _auth.currentUser!.displayName;
+    List<String> nomeSobrenome = displayName!.split(" ");
+    String primeiroNome = nomeSobrenome.isNotEmpty ? nomeSobrenome[0] : "";
+    String sobrenome = nomeSobrenome.length > 1 ? nomeSobrenome[1] : "";
     return Scaffold(
       backgroundColor: const Color(0XFF73AEF5),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: const Text('Tarefas'),
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Text(
-              'Olá usuário, seja bem-vindo ao To-Do List. Analise suas tarefas!',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              'Olá ${primeiroNome.substring(0, 1).toUpperCase()}${primeiroNome.substring(1).toLowerCase()} ${sobrenome.substring(0, 1).toUpperCase()}${sobrenome.substring(1).toLowerCase()}, seja bem-vindo ao To-Do List. Analise suas tarefas!',
+              style:
+                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
           ),
           BlocConsumer<HomeCubit, HomeState>(
@@ -81,7 +87,10 @@ class _HomePageState extends State<HomePage> {
                 if (state.tasks.isEmpty) {
                   return const Expanded(
                     child: Center(
-                      child: Text('Lista de tarefas vazia'),
+                      child: Text(
+                        'Lista de tarefas vazia',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   );
                 } else {
@@ -94,7 +103,10 @@ class _HomePageState extends State<HomePage> {
               } else if (state is DeleteHome && state.taskAtt.isEmpty) {
                 return const Expanded(
                   child: Center(
-                    child: Text('Lista de tarefas vazia'),
+                    child: Text(
+                      'Lista de tarefas vazia',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 );
               } else if (state is DeleteHome) {

@@ -97,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GlobalFormField(
                     controller: _passwordEC,
+                    obscureText: true,
                     validator: Validatorless.required('Senha obrigatória'),
                     hintText: "Insira sua senha",
                     icon: Icons.lock,

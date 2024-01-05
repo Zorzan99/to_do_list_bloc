@@ -22,6 +22,7 @@ class TodoList extends StatelessWidget {
     final user = _auth.currentUser;
 
     return ListView.builder(
+      shrinkWrap: true,
       itemCount: tasks.length,
       itemBuilder: (context, index) {
         return TodoItem(

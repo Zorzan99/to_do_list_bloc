@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class RegisterRepository {
@@ -7,6 +5,5 @@ abstract interface class RegisterRepository {
     String email,
     String password,
     String displayName,
-    Uint8List file,
   );
 }

@@ -26,11 +26,46 @@ class TodoList extends StatelessWidget {
       itemCount: tasks.length,
       itemBuilder: (context, index) {
         return TodoItem(
-          onLongPress: () {
-            if (user != null) {
-              cubit.deleteTask(user.uid, tasks[index]);
-            }
+          onDelete: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    contentPadding: const EdgeInsets.all(25),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Excluir tarefa?'),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+
+                                cubit.deleteTask(
+                                    _auth.currentUser!.uid, tasks[index]);
+                              },
+                              child: const Text(
+                                'Excluir',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                });
           },
+          onLongPress: () {},
           title: tasks[index].title,
           subtitle: tasks[index].description,
           onPressed: () {

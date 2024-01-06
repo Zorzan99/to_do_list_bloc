@@ -26,10 +26,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    String? displayName = _auth.currentUser!.displayName;
-    List<String> nomeSobrenome = displayName!.split(" ");
-    String primeiroNome = nomeSobrenome.isNotEmpty ? nomeSobrenome[0] : "";
-    String sobrenome = nomeSobrenome.length > 1 ? nomeSobrenome[1] : "";
     return Scaffold(
       backgroundColor: const Color(0XFF73AEF5),
       appBar: AppBar(
@@ -38,53 +34,71 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Tarefas'),
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Olá ${primeiroNome.substring(0, 1).toUpperCase()}${primeiroNome.substring(1).toLowerCase()} ${sobrenome.substring(0, 1).toUpperCase()}${sobrenome.substring(1).toLowerCase()}, seja bem-vindo ao To-Do List. Analise suas tarefas!',
-              style:
-                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Olá ${_auth.currentUser!.displayName}, seja bem-vindo ao To-Do List. Analise suas tarefas!',
+                style: const TextStyle(
+                    fontSize: 16.0, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          BlocConsumer<HomeCubit, HomeState>(
-            listener: (context, state) {
-              if (state is EditHome) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Tarefa atualizada com sucesso'),
-                      ],
+            BlocConsumer<HomeCubit, HomeState>(
+              listener: (context, state) {
+                if (state is EditHome) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Tarefa atualizada com sucesso'),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              } else if (state is DeleteHome) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Tarefa excluída com sucesso'),
-                      ],
+                  );
+                } else if (state is DeleteHome) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Tarefa excluída com sucesso'),
+                        ],
+                      ),
+                      backgroundColor: Colors.redAccent,
                     ),
-                    backgroundColor: Colors.redAccent,
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              if (state is LoadingHome) {
-                return const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              } else if (state is LoadedHome) {
-                if (state.tasks.isEmpty) {
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state is LoadingHome) {
+                  return const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if (state is LoadedHome) {
+                  if (state.tasks.isEmpty) {
+                    return const Expanded(
+                      child: Center(
+                        child: Text(
+                          'Lista de tarefas vazia',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return TodoList(tasks: state.tasks);
+                  }
+                } else if (state is FailureHome) {
+                  return Center(
+                    child: Text('Erro: ${state.message}'),
+                  );
+                } else if (state is DeleteHome && state.taskAtt.isEmpty) {
                   return const Expanded(
                     child: Center(
                       child: Text(
@@ -93,31 +107,16 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   );
-                } else {
+                } else if (state is DeleteHome) {
+                  return TodoList(tasks: state.taskAtt);
+                } else if (state is AddHome) {
                   return TodoList(tasks: state.tasks);
                 }
-              } else if (state is FailureHome) {
-                return Center(
-                  child: Text('Erro: ${state.message}'),
-                );
-              } else if (state is DeleteHome && state.taskAtt.isEmpty) {
-                return const Expanded(
-                  child: Center(
-                    child: Text(
-                      'Lista de tarefas vazia',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                );
-              } else if (state is DeleteHome) {
-                return TodoList(tasks: state.taskAtt);
-              } else if (state is AddHome) {
-                return TodoList(tasks: state.tasks);
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-        ],
+                return const SizedBox.shrink();
+              },
+            ),
+          ],
+        ),
       ),
       floatingActionButton: const FloatButtonHome(),
     );

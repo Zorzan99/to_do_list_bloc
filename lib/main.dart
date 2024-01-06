@@ -35,6 +35,8 @@ class MyApp extends StatelessWidget {
         // GLOBALIZAR PROVIDERS,
         // CONFIGURAR THEMA(FONTES, COR PRINCIPAL, ETC),
 
+        // json_rest_server 2.0.1
+        // https://www.youtube.com/watch?v=t7hVCMtnEIw
         Provider<LoginRepository>(
           create: (context) =>
               LoginRepositoryImpl(firebaseAuth: FirebaseAuth.instance),

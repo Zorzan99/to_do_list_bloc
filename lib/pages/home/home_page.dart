@@ -5,6 +5,7 @@ import 'package:to_do_list_bloc/pages/home/home_cubit.dart';
 import 'package:to_do_list_bloc/pages/home/home_state.dart';
 import 'package:to_do_list_bloc/pages/home/widgets/float_button_home.dart';
 import 'package:to_do_list_bloc/pages/home/widgets/todo_list.dart';
+import 'package:to_do_list_bloc/routes/routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,6 +34,21 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: const Text('Tarefas'),
         automaticallyImplyLeading: false,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.loginRoute, (route) => false);
+              },
+              child: const Icon(
+                Icons.exit_to_app,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),

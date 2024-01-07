@@ -108,14 +108,13 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Visibility(
                     visible: state is! LoadingLogin,
-                    replacement: const Column(
+                    replacement: Column(
                       children: [
                         CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          color: Colors.blue[800],
                         ),
-                        SizedBox(height: SpacingSize.xx),
-                        Text(
+                        const SizedBox(height: SpacingSize.xx),
+                        const Text(
                           'Realizando Login',
                           style: TextStyle(color: Colors.white),
                         ),

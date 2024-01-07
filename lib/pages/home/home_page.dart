@@ -92,9 +92,11 @@ class _HomePageState extends State<HomePage> {
               },
               builder: (context, state) {
                 if (state is LoadingHome) {
-                  return const Expanded(
+                  return Expanded(
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: Colors.blue[800],
+                      ),
                     ),
                   );
                 } else if (state is LoadedHome) {

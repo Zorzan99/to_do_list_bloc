@@ -31,6 +31,7 @@ class _FloatButtonHomeState extends State<FloatButtonHome> {
 
     final cubit = BlocProvider.of<HomeCubit>(context);
     return FloatingActionButton.extended(
+      backgroundColor: Colors.blue,
       onPressed: () {
         showDialog(
           context: context,

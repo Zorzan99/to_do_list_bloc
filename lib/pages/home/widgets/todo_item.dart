@@ -4,7 +4,6 @@ import 'package:to_do_list_bloc/core/sizes/text_size.dart';
 class TodoItem extends StatelessWidget {
   final String title;
   final String subtitle;
-  final VoidCallback onLongPress;
   final VoidCallback onPressed;
   final VoidCallback onDelete;
 
@@ -12,7 +11,6 @@ class TodoItem extends StatelessWidget {
     Key? key,
     required this.title,
     required this.subtitle,
-    required this.onLongPress,
     required this.onPressed,
     required this.onDelete,
   }) : super(key: key);
@@ -42,7 +40,6 @@ class TodoItem extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          onLongPress: onLongPress,
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

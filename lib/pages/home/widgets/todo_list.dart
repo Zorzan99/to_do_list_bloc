@@ -65,7 +65,6 @@ class TodoList extends StatelessWidget {
                   );
                 });
           },
-          onLongPress: () {},
           title: tasks[index].title,
           subtitle: tasks[index].description,
           onPressed: () {

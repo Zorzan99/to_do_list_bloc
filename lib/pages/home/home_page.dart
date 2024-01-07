@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   } else {
-                    return TodoList(tasks: state.tasks);
+                    return Expanded(child: TodoList(tasks: state.tasks));
                   }
                 } else if (state is FailureHome) {
                   return Center(
@@ -124,9 +124,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 } else if (state is DeleteHome) {
-                  return TodoList(tasks: state.taskAtt);
+                  return Expanded(child: TodoList(tasks: state.taskAtt));
                 } else if (state is AddHome) {
-                  return TodoList(tasks: state.tasks);
+                  return Expanded(child: TodoList(tasks: state.tasks));
                 }
                 return const SizedBox.shrink();
               },
